@@ -1,0 +1,149 @@
+{% extends 'base.html' %}
+
+{% block title %}Study Planner - StudySync{% endblock %}
+
+{% block content %}
+<div class="planner">
+    <h2>📘 Study Planner</h2>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="flash-message {{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST" class="planner-form">
+        <input type="text" name="subject" id="subjectInput" placeholder="Subject" required>
+        <input type="text" name="description" id="topicInput" placeholder="Description" required>
+
+       
+        
+        
+        <!-- New Fields -->
+        <input type="datetime-local" name="start_time" required>
+        <input type="datetime-local" name="end_time" required>
+
+        <select name="status" required>
+            <option value="pending">Pending</option>
+            <option value="in_progress">In Progress</option>
+            <option value="completed">Completed</option>
+        </select>
+        
+        <select name="priority" required>
+            <option value="low">Low</option>
+            <option value="normal">Normal</option>
+            <option value="high">High</option>
+        </select>
+
+        <button type="submit">➕ Add Plan</button>
+        <button type="button" onclick="getSuggestions()">💡 Get Suggestions</button>
+    </form>
+    
+    <div id="suggestions" class="suggestions-box"></div>
+
+    <h3>🗓️ Your Plans</h3>
+    {% if plans %}
+    <table class="planner-table">
+        <thead>
+            <tr>
+                <th>Subject</th>
+                <th>Description</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Status</th>
+                <th>Priority</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for plan in plans %}
+            <tr>
+                <td>{{ plan.subject }}</td>
+                <td>{{ plan.description }}</td>
+
+                <!-- Check if created_at is not None before calling strftime -->
+                <td>
+                    {% if plan.created_at %}
+                        {{ plan.created_at.strftime('%Y-%m-%d') }}
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </td>
+
+                <!-- Check if time is not None before calling strftime -->
+                <td>
+                    {% if plan.time %}
+                        {{ plan.time.strftime('%H:%M') }}
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </td>
+
+                <!-- Check if start_time is not None before calling strftime -->
+                <td>
+                    {% if plan.start_time %}
+                        {{ plan.start_time.strftime('%Y-%m-%d %H:%M') }}
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </td>
+
+                <!-- Check if end_time is not None before calling strftime -->
+                <td>
+                    {% if plan.end_time %}
+                        {{ plan.end_time.strftime('%Y-%m-%d %H:%M') }}
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </td>
+
+                <td>{{ plan.status }}</td>
+                <td>{{ plan.priority }}</td>
+                <td>
+                    <form method="POST" action="{{ url_for('planner.delete_plan', plan_id=plan.id) }}" onsubmit="return confirm('Delete this plan?');">
+                        <button type="submit" class="delete-btn">🗑️ Delete</button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="no-plans">No plans yet. Start by adding your first one above!</p>
+    {% endif %}
+</div>
+
+<script>
+    function getSuggestions() {
+        const subject = document.getElementById('subjectInput').value;
+        if (!subject) {
+            alert("Please enter a subject first.");
+            return;
+        }
+    
+        fetch(`/planner/suggest?subject=${encodeURIComponent(subject)}`)
+            .then(response => response.json())
+            .then(data => {
+                const suggestionsBox = document.getElementById('suggestions');
+                suggestionsBox.style.display = 'block';
+                if (data.success) {
+                    const topics = data.suggestions;
+                    suggestionsBox.innerHTML = "<strong>AI Topic Suggestions:</strong><ul>" +
+                        topics.map(topic => `<li onclick="fillTopic('${topic}')">${topic}</li>`).join('') +
+                        "</ul>";
+                } else {
+                    suggestionsBox.innerHTML = `<p>${data.error}</p>`;
+                }
+            });
+    }
+    
+    function fillTopic(topic) {
+        document.getElementById('topicInput').value = topic;
+    }
+</script>
+    
+{% endblock %}

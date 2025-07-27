@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin Panel - StudySync{% endblock %}
+
+{% block content %}
+<div class="admin-panel">
+    <h2>🛠️ Admin Panel</h2>
+
+    <h3>Registered Users</h3>
+    {% if users %}
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.email }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No users found.</p>
+    {% endif %}
+</div>
+{% endblock %}

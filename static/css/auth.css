@@ -1,0 +1,332 @@
+body {
+    background: #DBE6F6;  /* fallback for old browsers */
+      background: linear-gradient(to right, #ecbfaa,#f1b4ec, #c1b6ec); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family:'Times New Roman', Times, serif;
+    font-size: 16px;
+   
+  transition: background-color 0.4s ease, color 0.4s ease;
+
+}
+
+.container {
+    background: #fff;
+    border-radius: 40px;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25),
+                0 10px 10px rgba(0, 0, 0, 0.22);
+    position: relative;
+    overflow: hidden;
+    width: 898px;
+    max-width: 50%;
+    min-height: 350px;
+    display: flex;
+    transition: transform 0.6s ease-in-out;
+    padding: 30px;
+    text-align: center;
+        border-color: linear-gradient(#127096fd, #c5168b);
+}
+.container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.2);
+}
+.container.dark-mode {
+    background-color: linear-gradient(#19ecd0, #5f7ea7, #4320dd);
+    backdrop-filter: blur(10px);
+    color: #f1f1f1;
+}
+
+h3 {
+    font-size: 30px;
+    margin-bottom: 20px;
+    color: #333;
+    text-align: center;
+    animation: fadeIn 1s ease-in-out;
+  align-items: center;
+    color: #333;
+    animation: fadeIn 1s ease-in-out;
+    
+}
+.hello {
+    color: #333;
+    font-size: 30px;
+    margin-bottom: 20px;
+    animation: fadeIn 1s ease-in-out;
+    text-align: center;
+     margin-left: 80px;
+}
+
+
+p {
+    color: #090909;
+    margin-bottom: 40px;
+    font-size: 30px;
+    margin-left: 55px;
+    animation: fadeIn 1.5s ease-in-out;
+    
+}
+#signIn{
+    margin-left: 80px;
+     border: none;
+}
+#signUp{
+    margin-left: 80px;
+    border: none;
+}
+.ghost{
+    margin-left: 80px;
+    margin-top: 10px;
+    justify-content: center;
+ 
+  
+}
+#hy{
+    margin-left: 80px;
+}
+/* Form containers */
+.form-container {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    transition: all 0.6s ease-in-out;
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.sign-in-container {
+    left: 0;
+    z-index: 1;
+    opacity: 1;
+    transition: all 0.6s ease-in-out;
+    background-color: linear-gradient(#b46acafd, #c5168b);
+}
+
+.sign-up-container {
+    left: 0;
+    opacity: 0; /* Set opacity to 1 to make sure it shows */
+    z-index: 1;
+    transition: all 0.6s ease-in-out;
+}
+
+
+/* When right panel is active, slide the containers */
+.container.right-panel-active .sign-up-container {
+    transform: translateX(0); /* Slide sign-up to the right */
+    z-index: 5; /* Bring the sign-up container on top */
+    opacity: 1;
+}
+
+.container.right-panel-active .sign-in-container {
+    transform: translateX(-100%); /* Slide sign-in to the left */
+    opacity: 0;
+    z-index: 1; /* Keep the sign-in container behind */
+}
+
+/* Form styling */
+form {
+    background: #ffffff;
+    display: flex;
+    flex-direction: column;
+    padding: 0 50px;
+    height: 100%;
+    width: 70%;
+    justify-content: center;
+    align-items: center;
+}
+
+input {
+    background: linear-gradient(#e3e5f1, #ffecf0);
+    border: none;
+    padding: 12px 15px;
+    margin: 8px 0;
+    width: 100%;
+    color: #090909;
+    border-radius: 10px;
+}
+
+button {
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-weight: bold;
+  border-radius: 10px;
+    padding: 12px 45px;
+    background: linear-gradient(#7d87c2, #d88195);
+    color: #fff;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: transform 80ms ease-in;
+    margin-top: 20px;
+}
+button:hover {
+    background: linear-gradient(#a31b86, #5135b8);
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+button:active {
+    transform: scale(0.95);
+}
+
+button.ghost {
+    background-color: transparent;
+    border: 2px solid #ffffff;
+}
+
+/* Overlay container styles */
+.overlay-container {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 50%;
+    height: 100%;
+    overflow: hidden;
+    transition: transform 0.6s ease-in-out;
+    z-index: 100;
+}
+
+.overlay {
+    background: linear-gradient(to right, #6342fa, #ff416c);
+    color: #ffffff;
+    position: relative;
+    left: -100%;
+    height: 100%;
+    width: 200%;
+    transform: translateX(0);
+    transition: transform 0.6s ease-in-out;
+}
+
+.container.right-panel-active .overlay {
+    transform: translateX(50%);
+}
+
+/* Overlay panel adjustments */
+.overlay-panel {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0 40px;
+    text-align: center;
+    top: 0;
+    height: 100%;
+    width: 50%;
+    transform: translateX(0);
+    transition: transform 0.6s ease-in-out;
+}
+
+.overlay-left {
+    transform: translateX(-20%);
+}
+
+.overlay-right {
+    right: 0;
+    transform: translateX(0);
+}
+.signin-btn:hover {
+    background-color: #feb47b;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+  background: linear-gradient(to right, #daa085,#da85d3, #b4a5f3);
+  color: #111;
+  transition: all 0.3s ease;
+  overflow-x: hidden;
+}
+
+/* === Dark Mode === */
+body.dark-mode {
+  background:linear-gradient(to right, #357491, #254a58, #110546);
+  color: #f1f1f1;
+}
+
+body.dark-mode a {
+  color: #f1f1f1;
+}
+
+/* Optional: header and nav styling */
+nav a {
+  color: #111;
+  text-decoration: none;
+  padding: 10px 16px;
+  font-weight: 500;
+  transition: 0.3s ease;
+}
+
+body.dark-mode nav a {
+  color: #f1f1f1;
+}
+
+/* === Toggle Switch Styling === */
+.theme-toggle {
+  position: absolute;
+  top: 35px;
+  right: 30px;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 26px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  background-color: #ccc;
+  border-radius: 34px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  transition: .4s;
+}
+
+.slider:before {
+  content: "";
+  height: 20px;
+  width: 20px;
+  position: absolute;
+  left: 4px;
+  bottom: 3px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:checked + .slider:before {
+  transform: translateX(24px);
+}

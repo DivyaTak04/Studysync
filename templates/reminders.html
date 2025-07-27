@@ -1,0 +1,116 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/fontawesome.min.css" integrity="sha512-v8QQ0YQ3H4K6Ic3PJkym91KoeNT5S3PnDKvqnwqFD1oiqIl653crGZplPdU5KKtHjO0QKcQ2aUlQZYjHczkmGw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+{% extends 'base.html' %}
+
+{% block title %}Reminders - StudySync{% endblock %}
+
+{% block content %}
+<div class="reminders">
+    <h2>⏰ Set a Reminder</h2>
+
+    <form method="POST" class="reminder-form">
+        <input type="text" id="reminderMessage" name="message" placeholder="Reminder message (AI suggestion will appear here)" required>
+        
+        <input type="datetime-local" name="remind_at" required>
+    
+        <select name="study_plan_id" id="studyPlanSelect" required>
+            <option value="">📘 Select a Study Plan</option>
+            {% for plan in user_plans %}
+                <option value="{{ plan.id }}" data-subject="{{ plan.subject|lower }}">
+                    {{ plan.subject }} - {{ plan.description[:30] }}
+                </option>
+            {% endfor %}
+        </select>
+    
+        <button type="submit">Add Reminder</button>
+    </form>
+    
+
+    <h3><i class="fa-light fa-bell"></i>Your Reminders</h3>
+    {% if reminder_objs %}
+    <ul class="reminder-list">
+        {% for r in reminder_objs %}
+        <li>
+            <strong>{{ r.message }}</strong> — {{ r.remind_at.strftime('%Y-%m-%d %H:%M') }}
+            {% if r.study_plan_ref %}
+                <div class="linked-plan">🔗 Linked Plan: {{ r.study_plan_ref.subject }}</div>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>No reminders set. Add one above!</p>
+    {% endif %}
+</div>
+
+<script>
+    const aiSuggestions = {
+        'python': [
+            "Review Python concepts like loops and functions",
+            "Practice coding challenges on variables",
+            "Set a reminder to revisit object-oriented concepts"
+        ],
+        'data structures': [
+            "Revise binary trees and graphs",
+            "Review sorting algorithms",
+            "Practice dynamic programming problems"
+        ],
+        'dbms': [
+            "Study SQL queries and joins",
+            "Revise normalization and ER diagrams",
+            "Complete DBMS assignments"
+        ],
+        'os': [
+            "Review memory management in operating systems",
+            "Study CPU scheduling algorithms",
+            "Complete your OS lab exercises"
+        ]
+    };
+    
+    document.getElementById("studyPlanSelect").addEventListener("change", function () {
+        const selectedOption = this.options[this.selectedIndex];
+        const subject = selectedOption.getAttribute("data-subject");
+        const messageInput = document.getElementById("reminderMessage");
+    
+        if (subject && aiSuggestions[subject]) {
+            const suggestion = aiSuggestions[subject][0];
+            if (!messageInput.value.trim()) {
+                messageInput.value = suggestion;
+            } else {
+                const confirmReplace = confirm("Do you want to replace your message with an AI suggestion?");
+                if (confirmReplace) {
+                    messageInput.value = suggestion;
+                }
+            }
+        }
+    });
+    
+    document.addEventListener('DOMContentLoaded', () => {
+        if (Notification.permission !== "granted") {
+            Notification.requestPermission().then(permission => {
+                console.log("Notification permission:", permission);
+            });
+        }
+    
+        const reminders = JSON.parse('{{ reminders | tojson | safe }}');
+        console.log("Loaded Reminders:", reminders);
+    
+        reminders.forEach(reminder => {
+            const remindTime = new Date(reminder.remind_at).getTime();
+            const now = new Date().getTime();
+            const delay = remindTime - now;
+    
+            if (delay > 0 && delay < 3600000) {
+                setTimeout(() => {
+                    if (Notification.permission === "granted") {
+                        new Notification("📚 Reminder from StudySync", {
+                            body: reminder.message,
+                            icon: "/static/img/logo.png"
+                        });
+                    }
+                }, delay);
+            }
+        });
+    });
+    </script>
+    
+{% endblock %}
