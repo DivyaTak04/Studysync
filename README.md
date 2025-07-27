@@ -74,8 +74,4 @@ If you liked this project, please:
 
 ## 📄 License
 This project is licensed under the MIT License.
-<<<<<<< HEAD
 
-
-=======
->>>>>>> 24c1faec7fc7e2880c66f2de9861babdf48e100f
