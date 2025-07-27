@@ -25,9 +25,8 @@ Alembic for DB migrations
 
 OpenAI GPT (for scheduling/reminders AI)
 
-Jinja2 (if templating used)
+Jinja2 
 
-.env configuration for secrets
 
 # ScreenShots
 
@@ -39,7 +38,7 @@ Jinja2 (if templating used)
 
 # ⚙️ Setup Instructions
 ## 1. Clone the repository
-git clone https://github.com/your-username/StudySync.git
+git clone https://github.com/DivyaTak04/StudySync.git
 cd StudySync
 
 ## 2. Create a virtual environment
